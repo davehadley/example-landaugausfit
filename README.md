@@ -1,7 +1,9 @@
 # example-landaugausfit
 An example ROOT script that fits a Landau+Gaussian function to a ROOT histogram.
 
-The fitter is implemented by the class `LanGausFit`. The most basic usage is:
+This package provides a pyroot implementation of the ROOT example: [$ROOTSYS/tutorials/fit/langaus.C](https://root.cern.ch/root/html/tutorials/fit/langaus.C.html)
+
+The fitter is implemented by the class `LanGausFit` in the file `langaus.py`. The most basic usage is:
 ```python
 import ROOT
 from langaus import LanGausFit
@@ -14,6 +16,8 @@ func = fit.fit(histogram)
 # The fitter return a ROOT TF1 (a 1D function).
 func.Print()
 ```
+
+The actual fit function is implemented inside `langaus.C`. If you want to copy this code into another package then you should remember to copy both files. 
 
 You can test the fitter by running the script from the command line. 
 ```
