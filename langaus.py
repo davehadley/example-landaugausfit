@@ -4,42 +4,28 @@ import os
 
 import ROOT
 
-ROOT.gROOT.ProcessLine(".L langaus.C+")
-
-################################################################################
-
-def makehist():
-    rand = ROOT.TRandom3(213920)
-    h = ROOT.TH1F("h", "h", 100, -10.0, 50.0)
-    h.FillRandom("landau", 10000)
-    for _ in xrange(10000):
-        h.Fill(rand.Gaus(20.0, 2.0))
-    return h
-
 ################################################################################
 
 class LanGausFit:
-    """LanGausFit implements a 
+    """LanGausFit fits Landau convoluted with Gaussian to a ROOT histogram.
+
+    A simple example:
+    histogram = ROOT.TH1D("hist", "hist", 100, 0.0, 10.)
+    # fill histogram
+    fit = LanGausFit()
+    func = fit.fit(histogram)
+    func.Print()
     """
     def __init__(self):
         self._loadlib()
         self._tf1 = None
 
-    def _loadlib(self):
-        try:
-            #try to load the function
-            ROOT.langaufun
-        except AttributeError:
-            #try to compile the function
-            pkgdir = os.path.dirname(__file__)
-            path = os.sep.join((pkgdir, "langaus.C"))
-            path = os.path.abspath(path)
-            if not os.path.exists(path):
-                raise Exception("ERROR: file does not exist ", path)
-            ROOT.gROOT.ProcessLine(".L " + path +"+")
-        return
-
     def fit(self, histogram, fitrange=None, startwidth=None, startmpv=None, startnorm=None, startsigma=None):
+        """Fit Lan+Gaus function to a histogram.
+        
+        histogram must be of type TH1D (the D is important, errors will be thrown with a TH1F.)
+        You can optionally provide the starting fit parameters. If not provided they will be automatically calculated.
+        """
         # get fit starting parameters and fit range
         startwidth, startmpv, startnorm, startsigma = self._getstartingparameters(histogram, startwidth, startmpv, startnorm, startsigma)
         if not fitrange:
@@ -54,6 +40,20 @@ class LanGausFit:
         # store the function object and return it
         self._tf1 = tf1
         return tf1
+
+    def _loadlib(self):
+        try:
+            #try to load the function
+            ROOT.langaufun
+        except AttributeError:
+            #try to compile the function
+            pkgdir = os.path.dirname(__file__)
+            path = os.sep.join((pkgdir, "langaus.C"))
+            path = os.path.abspath(path)
+            if not os.path.exists(path):
+                raise Exception("ERROR: file does not exist ", path)
+            ROOT.gROOT.ProcessLine(".L " + path +"+")
+        return
 
     def _getstartingparameters(self, hist, startwidth, startmpv, startnorm, startsigma):
         rms = hist.GetRMS()
