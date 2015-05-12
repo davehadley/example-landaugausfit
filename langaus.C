@@ -52,5 +52,5 @@ Double_t langaufun(Double_t *x, Double_t *par) {
          sum += fland * TMath::Gaus(x[0],xx,par[3]);
       }
 
-      return (par[2] * step * sum * invsq2pi / par[3]);
+      return (par[2] * step * sum * invsq2pi);
 }

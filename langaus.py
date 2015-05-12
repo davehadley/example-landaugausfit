@@ -61,7 +61,7 @@ class LanGausFit:
         rms = hist.GetRMS()
         peakpos = hist.GetXaxis().GetBinCenter(hist.GetMaximumBin())
         if startwidth is None:
-            startwidth = rms / 10.0
+            startwidth = rms / 5.0
         if startmpv is None:
             startmpv = peakpos
         if startnorm is None:
