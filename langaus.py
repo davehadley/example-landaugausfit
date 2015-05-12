@@ -48,6 +48,8 @@ class LanGausFit:
         except AttributeError:
             #try to compile the function
             pkgdir = os.path.dirname(__file__)
+            if len(pkgdir) == 0:
+                pkgdir = "."
             path = os.sep.join((pkgdir, "langaus.C"))
             path = os.path.abspath(path)
             if not os.path.exists(path):
@@ -59,13 +61,13 @@ class LanGausFit:
         rms = hist.GetRMS()
         peakpos = hist.GetXaxis().GetBinCenter(hist.GetMaximumBin())
         if startwidth is None:
-            startwidth = rms / math.sqrt(2)
+            startwidth = rms / 10.0
         if startmpv is None:
             startmpv = peakpos
         if startnorm is None:
             startnorm = hist.Integral()
         if startsigma is None:
-            startsigma = rms / math.sqrt(2)
+            startsigma = rms / 10.0
         return startwidth, startmpv, startnorm, startsigma
 
     def _findlevel(self, l, hist):
