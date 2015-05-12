@@ -44,11 +44,11 @@ Double_t langaufun(Double_t *x, Double_t *par) {
       // Convolution integral of Landau and Gaussian by sum
       for(i=1.0; i<=np/2; i++) {
          xx = xlow + (i-.5) * step;
-         fland = TMath::Landau(xx,mpc,par[0], 1) / par[0];
+         fland = TMath::Landau(xx,mpc,par[0], 0) / par[0];
          sum += fland * TMath::Gaus(x[0],xx,par[3]);
 
          xx = xupp - (i-.5) * step;
-         fland = TMath::Landau(xx,mpc,par[0], 1) / par[0];
+         fland = TMath::Landau(xx,mpc,par[0], 0) / par[0];
          sum += fland * TMath::Gaus(x[0],xx,par[3]);
       }
 
